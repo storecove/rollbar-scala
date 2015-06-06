@@ -3,6 +3,7 @@ package com.github.acidghost.rollbar.test
 import com.github.acidghost.rollbar.RollbarNotifierFactory
 import org.scalatest.{Matchers, FlatSpec}
 import org.slf4j.{LoggerFactory, MDC}
+import scala.collection.JavaConversions._
 
 /**
  * Created by acidghost on 06/06/15.
@@ -34,7 +35,7 @@ class RollbarNotifierSpec extends FlatSpec with Matchers {
         MDC.put("test_MDC_key", "test value")
         val stream = new java.io.ByteArrayOutputStream()
         Console.withOut(stream) {
-            notifier.notify("messagetest", new Exception("new exception"), MDC.get)
+            notifier.notify("info", "messagetest", None, mapAsScalaMap(MDC.getCopyOfContextMap))
         }
         stream.toString should be ("test value\n")
     }
