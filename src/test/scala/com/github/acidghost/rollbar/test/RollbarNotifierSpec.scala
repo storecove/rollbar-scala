@@ -1,8 +1,9 @@
 package com.github.acidghost.rollbar.test
 
 import com.github.acidghost.rollbar.RollbarNotifierFactory
-import org.scalatest.{Matchers, FlatSpec}
+import org.scalatest.{FlatSpec, Matchers}
 import org.slf4j.{LoggerFactory, MDC}
+
 import scala.collection.JavaConversions._
 
 /**
