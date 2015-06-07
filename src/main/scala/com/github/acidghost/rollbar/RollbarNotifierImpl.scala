@@ -3,11 +3,13 @@ package com.github.acidghost.rollbar
 import java.io.{ByteArrayOutputStream, PrintStream}
 import java.net.InetAddress
 
+import dispatch.{Http => HTTP, url => URL, _}
 import org.json4s.JsonDSL._
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 
 import scala.collection.mutable
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Created by acidghost on 07/06/15.
@@ -22,19 +24,26 @@ private class RollbarNotifierImpl(protected val url: String,
     def getEnvironment: String = environment
     def getLanguage: String = language
 
-    override def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): Unit = {
-        val testValue = mdc.getOrElse("test_MDC_key", "aaa")
-        println(testValue)
-
+    override def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue = {
         val payload = buildPayload(level, message, throwable, mdc)
-        //TODO send payload to Rollbar
+        logger.info(s"PAYLOAD is\n${compact(payload)}")
+
+        //send payload to Rollbar
+        val request = URL(url).
+            setHeader("Content-Type", "application/json").
+            setHeader("Accept", "application/json").
+            setBody(compact(payload)).
+            POST
+        val future = HTTP(request > as.String)
+        val response = for (r <- future) yield r
+
+        parse(response())
     }
 
     private def buildPayload(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JObject = {
         val root = "access_token" -> apiKey
 
-        val data = "data" ->
-                    ("environment" -> environment) ~
+        val data = ("environment" -> environment) ~
                     ("level" -> level) ~
                     ("platform" -> mdc.getOrElse("platform", defaultPlatform)) ~
                     ("framework" -> mdc.getOrElse("framework", defaultPlatform)) ~
@@ -53,7 +62,7 @@ private class RollbarNotifierImpl(protected val url: String,
 
         val notifier = "notifier" -> getNotifier
 
-        root ~ data ~ body ~ person ~ server ~ notifier
+        root ~ ("data" -> (data ~ body ~ person ~ server ~ notifier))
     }
 
     private def getBody(message: String, throwable: Option[Throwable]): JObject = {

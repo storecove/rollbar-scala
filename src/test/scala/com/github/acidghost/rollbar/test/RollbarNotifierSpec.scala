@@ -1,24 +1,37 @@
 package com.github.acidghost.rollbar.test
 
+import java.util.Properties
+
 import com.github.acidghost.rollbar.RollbarNotifierFactory
 import org.scalatest.{FlatSpec, Matchers}
 import org.slf4j.{LoggerFactory, MDC}
+import org.json4s.jackson.JsonMethods._
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable
 
 /**
  * Created by acidghost on 06/06/15.
  */
 class RollbarNotifierSpec extends FlatSpec with Matchers {
 
-    val apiKey = "FAKE_API_KEY"
-    val environment = "test"
+    val properties = new Properties()
+    properties.load(Thread.currentThread().getContextClassLoader.getResourceAsStream("testing.properties"))
+
+    val apiKey = properties.getProperty("API_KEY", "YOUR_API_KEY")
+    val environment = properties.getProperty("ENVIRONMENT", "testing")
     val language = "java"
     val url = "http://www.fakeurl.com/api/v2"
     val defaultLanguage = "scala"
     val defaultUrl = "https://api.rollbar.com/api/1/item/"
 
     val logger = LoggerFactory.getLogger(getClass)
+
+    {
+        MDC.put("user", "acidghost")
+        MDC.put("platform", "scala")
+        MDC.put("environment", "test")
+    }
 
     "A RollbarNotifier" should "return the right parameters" in {
         val notifier = RollbarNotifierFactory.getNotifier(apiKey, environment)
@@ -33,12 +46,29 @@ class RollbarNotifierSpec extends FlatSpec with Matchers {
 
     it should "notify to rollbar correctly" in {
         val notifier = RollbarNotifierFactory.getNotifier(apiKey, environment)
-        MDC.put("test_MDC_key", "test value")
-        val stream = new java.io.ByteArrayOutputStream()
-        Console.withOut(stream) {
-            notifier.notify("info", "messagetest", None, mapAsScalaMap(MDC.getCopyOfContextMap))
-        }
-        stream.toString should be ("test value\n")
+        val response = notifier.notify("INFO", "This is a test error notification.", None, getMDC)
+        logger.info(compact(response))
+    }
+
+    it should "print the correct data" in {
+        val notifier = RollbarNotifierFactory.getNotifier(apiKey, environment)
+        val response = notifier.notify("INFO", "This is a test error notification.", Some(new Exception("this is the exception")), getMDC)
+        logger.info(compact(response))
+        val response2 = notifier.notify("INFO", "This is a test error notification.", None, getMDC)
+        logger.info(compact(response2))
+    }
+
+    /*
+    private def getMDC = {
+        mapAsScalaMap(MDC.getCopyOfContextMap match {
+            case null => mutable.Map.empty[String, String]
+            case mdc: mutable.Map[String, String] => mdc
+        })
+    }
+    */
+
+    private def getMDC = {
+        mapAsScalaMap(MDC.getCopyOfContextMap)
     }
 
 }
