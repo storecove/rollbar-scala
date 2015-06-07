@@ -10,6 +10,8 @@ import scala.collection.mutable
 trait RollbarNotifier {
 
     protected val defaultPlatform = "JVM"
+    protected val notifierName = "rollbar-scala"
+    protected val notifierVersion = "0.0.1"
 
     protected val logger: Logger = LoggerFactory.getLogger(classOf[RollbarNotifier])
 

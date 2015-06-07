@@ -1,6 +1,7 @@
 package com.github.acidghost.rollbar
 
 import java.io.{ByteArrayOutputStream, PrintStream}
+import java.net.InetAddress
 
 import org.json4s.JsonDSL._
 import org.json4s._
@@ -26,9 +27,10 @@ private class RollbarNotifierImpl(protected val url: String,
         println(testValue)
 
         val payload = buildPayload(level, message, throwable, mdc)
+        //TODO send payload to Rollbar
     }
 
-    private def buildPayload(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue = {
+    private def buildPayload(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JObject = {
         val root = "access_token" -> apiKey
 
         val data = "data" ->
@@ -41,7 +43,17 @@ private class RollbarNotifierImpl(protected val url: String,
 
         val body = "body" -> getBody(message, throwable)
 
-        render(root ~ data ~ body)
+        //TODO HTTP request data
+
+        val person = "person" -> getPerson(mdc)
+
+        //TODO client data
+
+        val server = "server" -> getServer
+
+        val notifier = "notifier" -> getNotifier
+
+        root ~ data ~ body ~ person ~ server ~ notifier
     }
 
     private def getBody(message: String, throwable: Option[Throwable]): JObject = {
@@ -91,5 +103,21 @@ private class RollbarNotifierImpl(protected val url: String,
           (("class" -> throwable.getClass.getName) ~ ("message" -> throwable.getMessage))
 
         "trace" -> trace
+    }
+
+    private def getPerson(mdc: mutable.Map[String, String]): Option[JObject] = {
+        mdc.get("user") match {
+            case Some(id) => Some(("id" -> id) ~ ("username" -> mdc.get("username")) ~ ("email" -> mdc.get("email")))
+            case _ => None
+        }
+    }
+
+    private def getServer: JObject = {
+        val localhost = InetAddress.getLocalHost
+        ("host" -> localhost.getHostName) ~ ("ip" -> localhost.getHostAddress)
+    }
+
+    private def getNotifier: JObject = {
+        ("name" -> notifierName) ~ ("version" -> notifierVersion)
     }
 }
