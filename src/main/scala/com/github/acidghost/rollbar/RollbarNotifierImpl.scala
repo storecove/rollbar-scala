@@ -34,10 +34,20 @@ private class RollbarNotifierImpl(protected val url: String,
             setHeader("Accept", "application/json").
             setBody(compact(payload)).
             POST
-        val future = HTTP(request > as.String)
-        val response = for (r <- future) yield r
+        val future: Future[Either[Throwable, String]] = HTTP(request > as.String).either
+        val response = for (e <- future.left) yield "Error!\t" + e.getMessage
 
-        parse(response())
+        response() match {
+            case Left(error) => error
+            case Right(json) =>
+                val respBody = parse(json)
+                val err = respBody \\ "err"
+                if (err == JInt(0)) {
+                    respBody
+                } else {
+                    respBody \\ "message"
+                }
+        }
     }
 
     private def buildPayload(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JObject = {
