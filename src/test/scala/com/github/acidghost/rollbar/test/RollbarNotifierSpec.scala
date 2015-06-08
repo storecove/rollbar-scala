@@ -58,17 +58,13 @@ class RollbarNotifierSpec extends FlatSpec with Matchers {
         logger.info(compact(response2))
     }
 
-    /*
     private def getMDC = {
-        mapAsScalaMap(MDC.getCopyOfContextMap match {
-            case null => mutable.Map.empty[String, String]
-            case mdc: mutable.Map[String, String] => mdc
-        })
-    }
-    */
-
-    private def getMDC = {
-        mapAsScalaMap(MDC.getCopyOfContextMap)
+        val mdc = MDC.getCopyOfContextMap
+        if (mdc == null) {
+            mutable.Map.empty[String, String]
+        } else {
+            mapAsScalaMap(mdc)
+        }
     }
 
 }
