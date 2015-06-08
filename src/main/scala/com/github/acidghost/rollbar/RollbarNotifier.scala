@@ -10,7 +10,6 @@ import scala.collection.mutable
  */
 trait RollbarNotifier extends RollbarNotifierData {
 
-    protected val defaultPlatform = "JVM"
     protected val notifierName = "rollbar-scala"
     protected val notifierVersion = "0.0.1"
 
@@ -20,14 +19,20 @@ trait RollbarNotifier extends RollbarNotifierData {
     def getApiKey: String = apiKey
     def getEnvironment: String = environment
     def getLanguage: String = language
+    def getPlatform: String = platform
 
     def setUrl(url: String) = this.url = url
     def setApiKey(apiKey: String) = this.apiKey = apiKey
     def setEnvironment(environment: String) = this.environment = environment
     def setLanguage(language: String) = this.language = language
+    def setPlatform(platform: String) = this.platform = platform
 
     def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue
 
 }
 
-abstract case class RollbarNotifierData(protected var url: String, protected var apiKey: String, protected var environment: String, protected var language: String)
+abstract case class RollbarNotifierData(protected var url: String,
+                                        protected var apiKey: String,
+                                        protected var environment: String,
+                                        protected var language: String,
+                                        protected var platform: String)
