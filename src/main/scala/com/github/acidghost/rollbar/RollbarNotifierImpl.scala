@@ -14,15 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * Created by acidghost on 07/06/15.
  */
-private class RollbarNotifierImpl(protected val url: String,
-                                  protected val apiKey: String,
-                                  protected val environment: String,
-                                  protected val language: String) extends RollbarNotifier {
-
-    def getUrl: String = url
-    def getApiKey: String = apiKey
-    def getEnvironment: String = environment
-    def getLanguage: String = language
+private class RollbarNotifierImpl(url: String, apiKey: String, environment: String, language: String) extends RollbarNotifierData(url, apiKey, environment, language) with RollbarNotifier {
 
     override def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue = {
         val payload = buildPayload(level, message, throwable, mdc)
