@@ -20,7 +20,7 @@ trait AbstractAppender {
 
     protected var apiKey: String = _
     protected var environment: String = _
-    protected var notifyLevel: Level = Level.ERROR
+    protected var notifyLevelString: String = "ERROR"
     protected var limit: Int = DEFAULT_LOGS_LIMITS
 
     protected val logBuffer: FiniteQueue[String] = new FiniteQueue[String](immutable.Queue[String]())
@@ -37,9 +37,10 @@ trait AbstractAppender {
 
     def setUrl(url: String) = rollbarNotifier.setUrl(url)
 
-    def setNotifyLevel(level: String) = this.notifyLevel = Level.toLevel(level, this.notifyLevel)
+    def setNotifyLevel(level: String): Unit
 
     def setLimit(limit: Int) = this.limit = limit
+    protected def notifyLevel: Any = "ERROR"
 
     protected def getMDCContext: mutable.Map[String, String] = {
         val mdc = MDC.getCopyOfContextMap

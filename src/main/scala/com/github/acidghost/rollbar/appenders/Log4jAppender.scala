@@ -1,6 +1,6 @@
 package com.github.acidghost.rollbar.appenders
 
-import org.apache.log4j.AppenderSkeleton
+import org.apache.log4j.{Level, AppenderSkeleton}
 import org.apache.log4j.helpers.LogLog
 import org.apache.log4j.spi.{LoggingEvent, ThrowableInformation}
 
@@ -41,4 +41,7 @@ class Log4jAppender extends AppenderSkeleton with AbstractAppender {
         }
     }
 
+    override def setNotifyLevel(notifyLevel: String) = notifyLevelString = notifyLevel
+
+    override protected def notifyLevel: Level = Level.toLevel(notifyLevelString)
 }
