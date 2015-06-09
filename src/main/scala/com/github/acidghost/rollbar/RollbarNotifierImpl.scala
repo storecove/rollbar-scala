@@ -14,15 +14,20 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * Created by acidghost on 07/06/15.
  */
-private class RollbarNotifierImpl(url: String,
-                                  apiKey: String,
-                                  environment: String,
-                                  language: String,
-                                  platform: String) extends RollbarNotifierData(url, apiKey, environment, language, platform) with RollbarNotifier {
+private class RollbarNotifierImpl extends RollbarNotifier {
+
+    def this(url: String, apiKey: String, environment: String, language: String, platform: String) = {
+        this()
+        setUrl(url)
+        setApiKey(apiKey)
+        setEnvironment(environment)
+        setLanguage(language)
+        setPlatform(platform)
+    }
 
     override def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue = {
         val payload = buildPayload(level, message, throwable, mdc)
-        logger.info(s"PAYLOAD is\n${compact(payload)}")
+        log(s"PAYLOAD is\n${compact(payload)}")
 
         //send payload to Rollbar
         val request = URL(url).
@@ -111,7 +116,7 @@ private class RollbarNotifierImpl(url: String,
             val raw = baos.toString("UTF-8")
             trace += ("raw" -> raw)
         } catch {
-            case e: Exception => logger.error("Exception printing stack trace.", e)
+            case e: Exception => log("Exception printing stack trace.", e)
         }
 
         trace += "exception" ->

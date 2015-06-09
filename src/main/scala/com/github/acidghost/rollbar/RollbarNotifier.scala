@@ -1,19 +1,24 @@
 package com.github.acidghost.rollbar
 
 import org.json4s.JValue
-import org.slf4j.{LoggerFactory, Logger}
 
 import scala.collection.mutable
 
 /**
  * Created by acidghost on 06/06/15.
  */
-trait RollbarNotifier extends RollbarNotifierData {
+trait RollbarNotifier {
 
     protected val notifierName = "rollbar-scala"
     protected val notifierVersion = "0.0.1"
 
-    protected val logger: Logger = LoggerFactory.getLogger(classOf[RollbarNotifier])
+    protected var url: String = _
+    protected var apiKey: String = _
+    protected var environment: String = _
+    protected var language: String = _
+    protected var platform: String = _
+
+    protected def log(x: Any) = println(s"[${classOf[RollbarNotifier]}] - $x")
 
     def getUrl: String = url
     def getApiKey: String = apiKey
@@ -30,9 +35,3 @@ trait RollbarNotifier extends RollbarNotifierData {
     def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue
 
 }
-
-abstract case class RollbarNotifierData(protected var url: String,
-                                        protected var apiKey: String,
-                                        protected var environment: String,
-                                        protected var language: String,
-                                        protected var platform: String)

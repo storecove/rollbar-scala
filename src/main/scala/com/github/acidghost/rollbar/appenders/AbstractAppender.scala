@@ -14,8 +14,6 @@ trait AbstractAppender {
 
     protected val DEFAULT_LOGS_LIMITS = 100
 
-    protected val rollbarNotifier: RollbarNotifier = RollbarNotifierFactory.getNotifier(apiKey, environment)
-
     protected var enabled: Boolean = true
     protected var onlyThrowable: Boolean = true
 
@@ -25,17 +23,28 @@ trait AbstractAppender {
     protected var notifyLevelString: String = "ERROR"
     protected var limit: Int = DEFAULT_LOGS_LIMITS
 
+    protected val rollbarNotifier: RollbarNotifier = RollbarNotifierFactory.getNotifier(apiKey, environment)
+
     protected val logBuffer: FiniteQueue[String] = new FiniteQueue[String](immutable.Queue[String]())
 
     def setEnabled(enabled: Boolean) = this.enabled = enabled
 
     def setOnlyThrowable(onlyThrowable: Boolean) = this.onlyThrowable = onlyThrowable
 
-    def setApiKey(apiKey: String) = rollbarNotifier.setApiKey(apiKey)
+    def setApiKey(apiKey: String) = {
+        rollbarNotifier.setApiKey(apiKey)
+        this.apiKey = apiKey
+    }
 
-    def setEnvironment(environment: String) = rollbarNotifier.setEnvironment(environment)
+    def setEnvironment(environment: String) = {
+        rollbarNotifier.setEnvironment(environment)
+        this.environment = environment
+    }
 
-    def setUrl(url: String) = rollbarNotifier.setUrl(url)
+    def setUrl(url: String) = {
+        rollbarNotifier.setUrl(url)
+        this.url = url
+    }
 
     def setNotifyLevel(level: String): Unit
 
