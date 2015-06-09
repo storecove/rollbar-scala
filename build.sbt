@@ -4,7 +4,7 @@ name := "rollbar-scala"
 
 version := "1.0"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.10.4"
 
 val slf4jVersion = "1.7.12"
 val dispatchVersion = "0.11.2"
