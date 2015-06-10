@@ -92,12 +92,10 @@ private class RollbarNotifierImpl extends RollbarNotifier {
     }
 
     private def createTrace(throwable: Throwable): JObject = {
-        val trace = mutable.Map.empty[String, JValue]
-
         val frames = throwable.getStackTrace.map { element =>
             val frame = ("class_name" -> element.getClassName) ~
-                        ("filename" -> element.getFileName) ~
-                        ("method" -> element.getMethodName)
+                ("filename" -> element.getFileName) ~
+                ("method" -> element.getMethodName)
 
             if (element.getLineNumber > 0) {
                 frame ~ ("lineno" -> element.getLineNumber)
@@ -105,24 +103,23 @@ private class RollbarNotifierImpl extends RollbarNotifier {
                 frame
             }
         }
-        trace += ("frames" -> JArray(frames.toList))
 
-        try {
+        val raw = try {
             val baos = new ByteArrayOutputStream()
             val ps = new PrintStream(baos)
             throwable.printStackTrace(ps)
             ps.close()
             baos.close()
-            val raw = baos.toString("UTF-8")
-            trace += ("raw" -> raw)
+            Some(baos.toString("UTF-8"))
         } catch {
-            case e: Exception => log("Exception printing stack trace.", e)
+            case e: Exception => log("Exception printing stack trace.", e) ; None
         }
 
-        trace += "exception" ->
-          (("class" -> throwable.getClass.getName) ~ ("message" -> throwable.getMessage))
-
-        "trace" -> trace
+        ("frames" -> frames.toList) ~
+            ("exception" ->
+                ("class" -> throwable.getClass.getName) ~
+                    ("message" -> throwable.getMessage)) ~
+            ("raw" -> raw)
     }
 
     private def getPerson(mdc: mutable.Map[String, String]): Option[JObject] = {
