@@ -1,4 +1,4 @@
-package com.github.acidghost.rollbar.appenders
+package com.storecove.rollbar.appenders
 
 import org.apache.log4j.{Level, AppenderSkeleton}
 import org.apache.log4j.helpers.LogLog

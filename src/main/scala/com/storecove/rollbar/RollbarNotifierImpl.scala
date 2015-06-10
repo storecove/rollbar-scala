@@ -1,4 +1,4 @@
-package com.github.acidghost.rollbar
+package com.storecove.rollbar
 
 import java.io.{ByteArrayOutputStream, PrintStream}
 import java.net.InetAddress
@@ -58,7 +58,7 @@ private class RollbarNotifierImpl extends RollbarNotifier {
                     ("level" -> level) ~
                     ("platform" -> mdc.getOrElse("platform", platform)) ~
                     ("framework" -> mdc.getOrElse("framework", platform)) ~
-                    ("language" -> language) ~
+                    ("language" -> scala.language) ~
                     ("timestamp" -> System.currentTimeMillis() / 1000)
 
         val body = "body" -> getBody(message, throwable)

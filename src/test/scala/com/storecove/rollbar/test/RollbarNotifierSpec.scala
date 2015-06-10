@@ -1,8 +1,7 @@
-package com.github.acidghost.rollbar.test
+package com.storecove.rollbar.test
 
 import java.util.Properties
-
-import com.github.acidghost.rollbar.RollbarNotifierFactory
+import com.storecove.rollbar.RollbarNotifierFactory
 import org.scalatest.{FlatSpec, Matchers}
 import org.slf4j.{LoggerFactory, MDC}
 import org.json4s.jackson.JsonMethods._

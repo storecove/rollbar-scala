@@ -1,4 +1,4 @@
-organization := "com.github.acidghost"
+organization := "com.storecove"
 
 name := "rollbar-scala"
 

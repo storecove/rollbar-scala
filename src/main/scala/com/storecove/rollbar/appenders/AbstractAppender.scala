@@ -1,7 +1,8 @@
-package com.github.acidghost.rollbar.appenders
+package com.storecove.rollbar.appenders
 
-import com.github.acidghost.rollbar.util.FiniteQueue
-import com.github.acidghost.rollbar.{RollbarNotifierDefaults, RollbarNotifier, RollbarNotifierFactory}
+import com.github.acidghost.rollbar.RollbarNotifierDefaults
+import com.storecove.rollbar.util.FiniteQueue
+import com.storecove.rollbar.{RollbarNotifier, RollbarNotifierFactory, RollbarNotifierDefaults}
 import org.slf4j.MDC
 
 import scala.collection.JavaConversions._

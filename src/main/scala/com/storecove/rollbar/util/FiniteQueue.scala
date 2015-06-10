@@ -1,4 +1,4 @@
-package com.github.acidghost.rollbar.util
+package com.storecove.rollbar.util
 
 import scala.collection.immutable.Queue
 

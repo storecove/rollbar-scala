@@ -1,4 +1,4 @@
-package com.github.acidghost.rollbar
+package com.storecove.rollbar
 
 /**
  * Created by acidghost on 06/06/15.

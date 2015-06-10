@@ -1,4 +1,4 @@
-package com.github.acidghost.rollbar.appenders
+package com.storecove.rollbar.appenders
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.spi.{ILoggingEvent, ThrowableProxy}

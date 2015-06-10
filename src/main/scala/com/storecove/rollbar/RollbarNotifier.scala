@@ -1,4 +1,4 @@
-package com.github.acidghost.rollbar
+package com.storecove.rollbar
 
 import org.json4s.JValue
 
