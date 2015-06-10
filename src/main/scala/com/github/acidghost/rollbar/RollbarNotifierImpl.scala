@@ -117,7 +117,7 @@ private class RollbarNotifierImpl extends RollbarNotifier {
 
         ("frames" -> frames.toList) ~
             ("exception" ->
-                ("class" -> throwable.getClass.getName) ~
+                ("class" -> throwable.getClass.getCanonicalName) ~
                     ("message" -> throwable.getMessage)) ~
             ("raw" -> raw)
     }
