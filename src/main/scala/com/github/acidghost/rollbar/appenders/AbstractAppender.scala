@@ -27,38 +27,38 @@ trait AbstractAppender {
 
     protected val logBuffer: FiniteQueue[String] = new FiniteQueue[String](immutable.Queue[String]())
 
-    def setEnabled(enabled: Boolean) = this.enabled = enabled
-
-    def setOnlyThrowable(onlyThrowable: Boolean) = this.onlyThrowable = onlyThrowable
-
-    def setApiKey(apiKey: String) = {
-        rollbarNotifier.setApiKey(apiKey)
-        this.apiKey = apiKey
-    }
-
-    def setEnvironment(environment: String) = {
-        rollbarNotifier.setEnvironment(environment)
-        this.environment = environment
-    }
-
-    def setUrl(url: String) = {
-        rollbarNotifier.setUrl(url)
-        this.url = url
-    }
-
     def setNotifyLevel(level: String): Unit
-
-    def setLimit(limit: Int) = this.limit = limit
 
     protected def notifyLevel: Any = "ERROR"
 
-    def getEnabled = enabled
-    def getOnlyThrowable = onlyThrowable
-    def getApiKey = apiKey
-    def getEnvironment = environment
-    def getUrl = url
-    def getNotifyLevel = notifyLevelString
-    def getLimit = limit
+    def setEnabled(enabled: Boolean): Unit = this.enabled = enabled
+
+    def setOnlyThrowable(onlyThrowable: Boolean): Unit = this.onlyThrowable = onlyThrowable
+
+    def setApiKey(apiKey: String): Unit = {
+        this.apiKey = apiKey
+        rollbarNotifier.setApiKey(apiKey)
+    }
+
+    def setEnvironment(environment: String): Unit = {
+        this.environment = environment
+        rollbarNotifier.setEnvironment(environment)
+    }
+
+    def setUrl(url: String): Unit = {
+        this.url = url
+        rollbarNotifier.setUrl(url)
+    }
+
+    def setLimit(limit: Int): Unit = this.limit = limit
+
+    def getEnabled: Boolean = enabled
+    def getOnlyThrowable: Boolean = onlyThrowable
+    def getApiKey: String = apiKey
+    def getEnvironment: String = environment
+    def getUrl: String = url
+    def getNotifyLevel: String = notifyLevelString
+    def getLimit: Int = limit
 
     protected def getMDCContext: mutable.Map[String, String] = {
         val mdc = MDC.getCopyOfContextMap

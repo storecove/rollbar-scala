@@ -26,10 +26,10 @@ class LogbackAppender extends UnsynchronizedAppenderBase[ILoggingEvent] with Abs
     }
 
     override def start(): Unit = {
-        if (apiKey == null || apiKey.isEmpty) {
-            addError("No apiKey set for the appender named [" + getName + "].")
-        } else if (environment == null || environment.isEmpty) {
-            addError("No environment set for the appender named [" + getName + "].")
+        if (this.apiKey == null || this.apiKey.isEmpty) {
+            this.addError("No apiKey set for the appender named [" + getName + "].")
+        } else if (this.environment == null || this.environment.isEmpty) {
+            this.addError("No environment set for the appender named [" + getName + "].")
         } else {
             super.start()
         }
@@ -42,7 +42,8 @@ class LogbackAppender extends UnsynchronizedAppenderBase[ILoggingEvent] with Abs
         }
     }
 
-    override def setNotifyLevel(notifyLevel: String) = notifyLevelString = notifyLevel
+    override def notifyLevel: Level = Level.toLevel(notifyLevelString)
 
-    override protected def notifyLevel: Level = Level.toLevel(notifyLevelString)
+    def setNotifyLevel(notifyLevel: String): Unit = notifyLevelString = notifyLevel
+
 }

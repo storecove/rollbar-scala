@@ -27,7 +27,7 @@ private class RollbarNotifierImpl extends RollbarNotifier {
 
     override def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue = {
         val payload = buildPayload(level, message, throwable, mdc)
-        log(s"PAYLOAD is\n${compact(payload)}")
+        //log(s"PAYLOAD is\n${compact(payload)}")
 
         //send payload to Rollbar
         val request = URL(url).

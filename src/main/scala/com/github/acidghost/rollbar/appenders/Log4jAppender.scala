@@ -21,7 +21,7 @@ class Log4jAppender extends AppenderSkeleton with AbstractAppender {
                     rollbarNotifier.notify(event.getLevel.toString, event.getMessage.toString, getThrowable(event), getMDCContext)
                 }
             } catch {
-                case e: Exception => LogLog.error("Error sending error notification! error=" + e.getClass.getName + " with message=" + e.getMessage)
+                case e: Exception => LogLog.error("error=" + e.getClass.getName + " with message=" + e.getMessage + "\n" + e.getStackTrace.map(trace => trace.toString).mkString("\n"))
             }
         }
     }
@@ -30,18 +30,29 @@ class Log4jAppender extends AppenderSkeleton with AbstractAppender {
 
     override def close(): Unit = {}
 
+
+    override def activateOptions(): Unit = {
+        if (this.apiKey == null || this.apiKey.isEmpty) {
+            println("No apiKey set for the appender named [" + getName + "].")
+        } else if (this.environment == null || this.environment.isEmpty) {
+            println("No environment set for the appender named [" + getName + "].")
+        } else {
+            println(s"PARAMETERS SET\n\n$apiKey / $environment\n")
+            super.activateOptions()
+        }
+    }
+
     protected def getThrowable(event: LoggingEvent): Option[Throwable] = {
         event.getThrowableInformation match {
             case throwableInfo: ThrowableInformation => Some(throwableInfo.getThrowable)
             case _ => event.getMessage match {
                 case throwable: Throwable => Some(throwable)
-                case throwable: String => Some(throwable.asInstanceOf[Throwable])
                 case _ => None
             }
         }
     }
 
-    override def setNotifyLevel(notifyLevel: String) = notifyLevelString = notifyLevel
-
     override protected def notifyLevel: Level = Level.toLevel(notifyLevelString)
+
+    def setNotifyLevel(notifyLevel: String) = notifyLevelString = notifyLevel
 }
