@@ -22,7 +22,27 @@ libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % scalatestVersion % "test"
 )
 
+// Plugins configuration
+
+useGpg := true
+
+publishTo := {
+    val nexus = "https://oss.sonatype.org/"
+    if (isSnapshot.value)
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+    else
+        Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
+
+publishMavenStyle := true
+
+publishArtifact in Test := false
+
+pomIncludeRepository := { _ => false }
+
 pomExtra in Global := {
+    <name>${organization}:${name}</name>
+    <description>Notifier library for integrating Scala apps with the Rollbar service.</description>
     <url>https://github.com/storecove/rollbar-scala</url>
     <licenses>
         <license>
@@ -40,9 +60,10 @@ pomExtra in Global := {
             <id>acidghost</id>
             <name>Andrea Jemmett</name>
             <url>https://github.com/acidghost</url>
+            <organization>Storecove</organization>
+            <organizationUrl>http://www.storecove.com</organizationUrl>
         </developer>
     </developers>
 }
 
-// Plugins configuration
 net.virtualvoid.sbt.graph.Plugin.graphSettings
