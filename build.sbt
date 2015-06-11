@@ -22,5 +22,27 @@ libraryDependencies ++= Seq(
     "org.scalatest" %% "scalatest" % scalatestVersion % "test"
 )
 
+pomExtra in Global := {
+    <url>https://github.com/storecove/rollbar-scala</url>
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git@github.com:storecove/rollbar-scala.git</connection>
+        <developerConnection>scm:git:git@github.com:storecove/rollbar-scala.git</developerConnection>
+        <url>git@github.com:storecove/rollbar-scala</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>acidghost</id>
+            <name>Andrea Jemmett</name>
+            <url>https://github.com/acidghost</url>
+        </developer>
+    </developers>
+}
+
 // Plugins configuration
 net.virtualvoid.sbt.graph.Plugin.graphSettings

@@ -9,7 +9,9 @@ object RollbarNotifierFactory {
                     environment: String,
                     language: String = RollbarNotifierDefaults.defaultLanguage,
                     url: String = RollbarNotifierDefaults.defaultUrl,
-                    platform: String = RollbarNotifierDefaults.defaultPlatform): RollbarNotifier = new RollbarNotifierImpl(url, apiKey, environment, language, platform)
+                    platform: String = RollbarNotifierDefaults.defaultPlatform): RollbarNotifier =
+
+        new RollbarNotifierImpl(url, apiKey, environment, language, platform)
 
 }
 

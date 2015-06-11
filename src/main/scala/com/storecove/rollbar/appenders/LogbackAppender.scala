@@ -15,9 +15,9 @@ class LogbackAppender extends UnsynchronizedAppenderBase[ILoggingEvent] with Abs
             try {
                 if (event.getLevel.isGreaterOrEqual(notifyLevel)) {
                     val hasThrowable = event.getThrowableProxy != null
-                    if (onlyThrowable && !hasThrowable) return
-
-                    rollbarNotifier.notify(event.getLevel.toString, event.getMessage, getThrowable(event), getMDCContext)
+                    if (!onlyThrowable || hasThrowable) {
+                        rollbarNotifier.notify(event.getLevel.toString, event.getMessage, getThrowable(event), getMDCContext)
+                    }
                 }
             } catch {
                 case e: Exception => LogLog.error("Error sending error notification! error=" + e.getClass.getName + " with message=" + e.getMessage)

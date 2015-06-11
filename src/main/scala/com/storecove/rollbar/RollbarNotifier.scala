@@ -26,11 +26,11 @@ trait RollbarNotifier {
     def getLanguage: String = language
     def getPlatform: String = platform
 
-    def setUrl(url: String) = this.url = url
-    def setApiKey(apiKey: String) = this.apiKey = apiKey
-    def setEnvironment(environment: String) = this.environment = environment
-    def setLanguage(language: String) = this.language = language
-    def setPlatform(platform: String) = this.platform = platform
+    def setUrl(url: String): Unit = this.url = url
+    def setApiKey(apiKey: String): Unit = this.apiKey = apiKey
+    def setEnvironment(environment: String): Unit = this.environment = environment
+    def setLanguage(language: String): Unit = this.language = language
+    def setPlatform(platform: String): Unit = this.platform = platform
 
     def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue
 

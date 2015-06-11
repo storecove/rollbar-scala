@@ -1,6 +1,5 @@
 package com.storecove.rollbar.test
 
-import com.github.acidghost.rollbar.RollbarNotifierFactory
 import com.storecove.rollbar.{RollbarNotifier, RollbarNotifierFactory}
 import org.scalatest.{FlatSpec, Matchers}
 

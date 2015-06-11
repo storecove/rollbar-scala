@@ -1,8 +1,8 @@
 package com.storecove.rollbar.appenders
 
-import org.apache.log4j.{Level, AppenderSkeleton}
 import org.apache.log4j.helpers.LogLog
 import org.apache.log4j.spi.{LoggingEvent, ThrowableInformation}
+import org.apache.log4j.{AppenderSkeleton, Level}
 
 /**
  * Created by acidghost on 08/06/15.
@@ -16,12 +16,14 @@ class Log4jAppender extends AppenderSkeleton with AbstractAppender {
 
                 if (event.getLevel.isGreaterOrEqual(notifyLevel)) {
                     val hasThrowable = event.getThrowableInformation != null || event.getMessage.isInstanceOf[Throwable]
-                    if (onlyThrowable && !hasThrowable) return
-
-                    rollbarNotifier.notify(event.getLevel.toString, event.getMessage.toString, getThrowable(event), getMDCContext)
+                    if (!onlyThrowable || hasThrowable) {
+                        rollbarNotifier.notify(event.getLevel.toString, event.getMessage.toString, getThrowable(event), getMDCContext)
+                    }
                 }
             } catch {
-                case e: Exception => LogLog.error("error=" + e.getClass.getName + " with message=" + e.getMessage + "\n" + e.getStackTrace.map(trace => trace.toString).mkString("\n"))
+                case e: Exception =>
+                    val stackTrace = e.getStackTrace.map(trace => trace.toString).mkString("\n")
+                    LogLog.error("error=" + e.getClass.getName + " with message=" + e.getMessage + "\n" + stackTrace)
             }
         }
     }
@@ -54,5 +56,5 @@ class Log4jAppender extends AppenderSkeleton with AbstractAppender {
 
     override protected def notifyLevel: Level = Level.toLevel(notifyLevelString)
 
-    def setNotifyLevel(notifyLevel: String) = notifyLevelString = notifyLevel
+    def setNotifyLevel(notifyLevel: String): Unit = notifyLevelString = notifyLevel
 }

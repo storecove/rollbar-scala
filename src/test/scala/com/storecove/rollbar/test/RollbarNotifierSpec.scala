@@ -1,10 +1,11 @@
 package com.storecove.rollbar.test
 
 import java.util.Properties
+
 import com.storecove.rollbar.RollbarNotifierFactory
+import org.json4s.jackson.JsonMethods._
 import org.scalatest.{FlatSpec, Matchers}
 import org.slf4j.{LoggerFactory, MDC}
-import org.json4s.jackson.JsonMethods._
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
