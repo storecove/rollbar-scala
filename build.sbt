@@ -24,8 +24,6 @@ libraryDependencies ++= Seq(
 
 // Plugins configuration
 
-useGpg := true
-
 publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
@@ -41,7 +39,6 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 pomExtra in Global := {
-    <name>${organization}:${name}</name>
     <description>Notifier library for integrating Scala apps with the Rollbar service.</description>
     <url>https://github.com/storecove/rollbar-scala</url>
     <licenses>
