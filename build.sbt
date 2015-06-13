@@ -4,6 +4,8 @@ name := "rollbar-scala"
 
 version := "1.0"
 
+description := "Notifier library for integrating Scala apps with the Rollbar service."
+
 scalaVersion := "2.10.4"
 
 val slf4jVersion = "1.7.12"
@@ -39,7 +41,6 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 pomExtra in Global := {
-    <description>Notifier library for integrating Scala apps with the Rollbar service.</description>
     <url>https://github.com/storecove/rollbar-scala</url>
     <licenses>
         <license>
