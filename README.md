@@ -1,4 +1,4 @@
-[![GitHub release](https://img.shields.io/github/release/storecove/rollbar-scala.svg)](https://github.com/storecove/rollbar-scala/releases) [![GitHub issues](https://img.shields.io/github/issues/storecove/rollbar-scala.svg)](https://github.com/storecove/rollbar-scala/issues)
+[![GitHub release](https://img.shields.io/github/release/storecove/rollbar-scala.svg)](https://github.com/storecove/rollbar-scala/releases) [![GitHub issues](https://img.shields.io/github/issues/storecove/rollbar-scala.svg)](https://github.com/storecove/rollbar-scala/issues) [![GitHub license](https://img.shields.io/github/license/storecove/rollbar-scala.svg)](https://github.com/storecove/rollbar-scala/blob/master/LICENSE)
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/storecove/rollbar-scala?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
