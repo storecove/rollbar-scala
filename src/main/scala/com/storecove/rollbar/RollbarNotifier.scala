@@ -1,6 +1,6 @@
 package com.storecove.rollbar
 
-import org.json4s.JValue
+import org.json4s.{JObject, JValue}
 
 import scala.collection.mutable
 
@@ -33,5 +33,7 @@ trait RollbarNotifier {
     def setPlatform(platform: String): Unit = this.platform = platform
 
     def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue
+
+    protected[rollbar] def buildPayload(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JObject
 
 }

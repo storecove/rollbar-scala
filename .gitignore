@@ -16,5 +16,3 @@ project/plugins/project/
 .scala_dependencies
 .worksheet
 .idea
-
-src/test/resources/testing.properties

@@ -51,7 +51,7 @@ private class RollbarNotifierImpl extends RollbarNotifier {
         }
     }
 
-    private def buildPayload(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JObject = {
+    override protected[rollbar] def buildPayload(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JObject = {
         val root = "access_token" -> apiKey
 
         val data = ("environment" -> environment) ~
