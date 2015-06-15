@@ -2,7 +2,7 @@ organization := "com.storecove"
 
 name := "rollbar-scala"
 
-version := "1.0"
+version := "1.0-SNAPSHOT"
 
 description := "Notifier library for integrating Scala apps with the Rollbar service."
 
