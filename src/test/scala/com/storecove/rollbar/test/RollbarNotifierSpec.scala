@@ -4,14 +4,16 @@ import java.net.InetAddress
 
 import com.storecove.rollbar.RollbarNotifierFactory
 import org.json4s.JsonAST.JField
-import org.json4s._
 import org.json4s.JsonDSL._
+import org.json4s._
 import org.json4s.jackson.JsonMethods._
 import org.scalatest.{FlatSpec, Matchers}
 import org.slf4j.{LoggerFactory, MDC}
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
 
 /**
  * Created by acidghost on 06/06/15.
@@ -52,7 +54,11 @@ class RollbarNotifierSpec extends FlatSpec with Matchers {
     ignore should "notify to rollbar correctly" in {
         val notifier = RollbarNotifierFactory.getNotifier(apiKey, environment)
         val response = notifier.notify("INFO", "This is a test error notification.", None, getMDC)
-        logger.info(compact(response))
+        response.onComplete {
+            case Success(s) =>
+                logger.info(compact(s))
+            case Failure(f) => throw f
+        }
     }
 
     it should "print the correct data" in {
