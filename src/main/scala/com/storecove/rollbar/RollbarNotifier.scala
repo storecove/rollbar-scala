@@ -1,8 +1,9 @@
 package com.storecove.rollbar
 
-import org.json4s.{JObject, JValue}
+import org.json4s.JObject
 
 import scala.collection.mutable
+import scala.concurrent.Future
 
 /**
  * Created by acidghost on 06/06/15.
@@ -32,7 +33,7 @@ trait RollbarNotifier {
     def setLanguage(language: String): Unit = this.language = language
     def setPlatform(platform: String): Unit = this.platform = platform
 
-    def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue
+    def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): Future[String]
 
     protected[rollbar] def buildPayload(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JObject
 

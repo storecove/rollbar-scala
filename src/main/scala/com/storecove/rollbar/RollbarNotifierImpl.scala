@@ -4,12 +4,13 @@ import java.io.{ByteArrayOutputStream, PrintStream}
 import java.net.InetAddress
 
 import dispatch.{Http => HTTP, url => URL, _}
+import dispatch.Defaults._
 import org.json4s.JsonDSL._
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 
 import scala.collection.mutable
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.promise
 
 /**
  * Created by acidghost on 07/06/15.
@@ -25,7 +26,7 @@ private class RollbarNotifierImpl extends RollbarNotifier {
         setPlatform(platform)
     }
 
-    override def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JValue = {
+    override def notify(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): Future[String] = {
         val payload = buildPayload(level, message, throwable, mdc)
         //log(s"PAYLOAD is\n${compact(payload)}")
 
@@ -35,20 +36,24 @@ private class RollbarNotifierImpl extends RollbarNotifier {
             setHeader("Accept", "application/json").
             setBody(compact(payload)).
             POST
-        val future: Future[Either[Throwable, String]] = HTTP(request > as.String).either
-        val response = for (e <- future.left) yield "Error!\t" + e.getMessage
+        //log("Executing request...")
+        val future: Future[Either[Throwable, String]] = HTTP(request OK as.String).either
+        //log("Request executed...")
 
-        response() match {
-            case Left(error) => error
-            case Right(json) =>
-                val respBody = parse(json)
-                val err = respBody \\ "err"
-                if (err == JInt(0)) {
-                    respBody
+        val p = promise[String]()
+
+        future.onSuccess {
+            case Left(t) => p.success(t.getMessage)
+            case Right(response) =>
+                val respBody = parse(response)
+                val body = if (respBody \\ "err" == JInt(0)) {
+                    compact(respBody)
                 } else {
-                    respBody \\ "message"
+                    compact(respBody \\ "message")
                 }
         }
+
+        p.future
     }
 
     override protected[rollbar] def buildPayload(level: String, message: String, throwable: Option[Throwable], mdc: mutable.Map[String, String]): JObject = {
