@@ -9,7 +9,7 @@ description := "Notifier library for integrating Scala apps with the Rollbar ser
 scalaVersion := "2.10.4"
 
 val slf4jVersion = "1.7.12"
-val dispatchVersion = "0.11.2"
+val dispatchVersion = "0.11.3"
 val log4jVersion = "1.2.17"
 val logbackVersion = "1.1.3"
 val json4sVersion = "3.2.11"
