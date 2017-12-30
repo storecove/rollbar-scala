@@ -6,14 +6,14 @@ version := "1.1-SNAPSHOT"
 
 description := "Notifier library for integrating Scala apps with the Rollbar service."
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.12.4"
 
 val slf4jVersion = "1.7.12"
-val dispatchVersion = "0.11.2"
+val dispatchVersion = "0.13.2"
 val log4jVersion = "1.2.17"
 val logbackVersion = "1.1.3"
 val json4sVersion = "3.2.11"
-val scalatestVersion = "2.2.4"
+val scalatestVersion = "3.0.4"
 
 libraryDependencies ++= Seq(
     "org.slf4j" % "slf4j-api" % slf4jVersion % "provided",
